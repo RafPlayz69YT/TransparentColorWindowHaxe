@@ -12,7 +12,7 @@ typedef DWORD = LONG;
 typedef COLORREF = DWORD;
 
 @:headerCode("#include <windows.h>")
-class TransparentWindow // ignore the errors lol
+class TransparentWindow // ignore the errors lol it compiles fine
 {
 	@:native("FindWindowA") @:extern
 	private static function findWindow(className:cpp.ConstCharStar, windowName:cpp.ConstCharStar):HWND
@@ -30,6 +30,13 @@ class TransparentWindow // ignore the errors lol
 	private static function getLastError():DWORD
 		return null;
 
+	/*
+        This sets a color so that whenever it appears, it becomes transparent. 
+        Unsure if this can stack.
+        @param color Should be in a 0xAARRGGBB format.
+        @param winName Just put the name of a (should be the game's) window, or better yet just 
+        do something like openfl.Lib.current.application.window.title 
+        */
 	public static function setColorKey(color:Int, winName:String):Void
 	{
 		var win:HWND = findWindow(null, winName);
@@ -52,7 +59,13 @@ class TransparentWindow // ignore the errors lol
 			return;
 		}
 	}
-
+	
+ 	/*
+        This makes a color non-transparent. 
+        @param color Should be in a 0xAARRGGBB format.
+        @param winName Just put the name of a (should be the game's) window, or better yet just 
+        do something like openfl.Lib.current.application.window.title 
+        */
 	public static function removeColorKey(color:Int, winName:String)
 	{
 		var win:HWND = findWindow(null, winName);

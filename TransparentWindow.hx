@@ -1,5 +1,6 @@
 package; // code not by me, found on the haxe discord server
 
+#if windows
 @:native("HWND__") extern class HWNDStruct
 {
 }
@@ -12,8 +13,10 @@ typedef DWORD = LONG;
 typedef COLORREF = DWORD;
 
 @:headerCode("#include <windows.h>")
+#end
 class TransparentWindow // ignore the errors lol it compiles fine
 {
+	#if windows
 	@:native("FindWindowA") @:extern
 	private static function findWindow(className:cpp.ConstCharStar, windowName:cpp.ConstCharStar):HWND
 		return null;
@@ -29,7 +32,7 @@ class TransparentWindow // ignore the errors lol it compiles fine
 	@:native("GetLastError") @:extern
 	private static function getLastError():DWORD
 		return null;
-
+        #end
 	/*
         This sets a color so that whenever it appears, it becomes transparent. 
         Unsure if this can stack.
@@ -39,6 +42,7 @@ class TransparentWindow // ignore the errors lol it compiles fine
         */
 	public static function setColorKey(color:Int, winName:String):Void
 	{
+		#if windows
 		var win:HWND = findWindow(null, winName);
 		if (win == null)
 		{
@@ -58,6 +62,9 @@ class TransparentWindow // ignore the errors lol it compiles fine
 			trace("Code: " + Std.string(getLastError()));
 			return;
 		}
+		#else
+		trace("windows only lol");
+		#end
 	}
 	
  	/*
@@ -68,6 +75,7 @@ class TransparentWindow // ignore the errors lol it compiles fine
         */
 	public static function removeColorKey(color:Int, winName:String)
 	{
+		#if windows
 		var win:HWND = findWindow(null, winName);
 		if (win == null)
 		{
@@ -87,5 +95,8 @@ class TransparentWindow // ignore the errors lol it compiles fine
 			trace("Code: " + Std.string(getLastError()));
 			return;
 		}
+		#else
+			trace("windows only lolol");
+			#end
 	}
 }

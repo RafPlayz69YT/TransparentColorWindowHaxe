@@ -36,6 +36,7 @@ class TransparentWindow // ignore the errors lol it compiles fine
 	/*
         This sets a color so that whenever it appears, it becomes transparent. 
         Unsure if this can stack.
+        Returns true if it succeeds, false if not.
         @param color Should be in a 0xAARRGGBB format.
         @param winName Just put the name of a (should be the game's) window, or better yet just 
         do something like openfl.Lib.current.application.window.title 
@@ -48,27 +49,30 @@ class TransparentWindow // ignore the errors lol it compiles fine
 		{
 			trace("Error finding window!");
 			trace("Code: " + Std.string(getLastError()));
-			return;
+			return false;
 		}
 		if (setWindowLong(win, -20, 0x00080000) == 0)
 		{
 			trace("Error setting window to be layered!");
 			trace("Code: " + Std.string(getLastError()));
-			return;
+			return false;
 		}
 		if (setLayeredWindowAttributes(win, color, 0, 0x00000001) == 0)
 		{
 			trace("Error setting color key on window!");
 			trace("Code: " + Std.string(getLastError()));
-			return;
+			return false;
 		}
+		return true;
 		#else
 		trace("windows only lol");
+		return false;
 		#end
 	}
 	
  	/*
         This makes a color non-transparent. 
+        Returns true if it succeeds, false if not.
         @param color Should be in a 0xAARRGGBB format.
         @param winName Just put the name of a (should be the game's) window, or better yet just 
         do something like openfl.Lib.current.application.window.title 
@@ -81,22 +85,24 @@ class TransparentWindow // ignore the errors lol it compiles fine
 		{
 			trace("Error finding window!");
 			trace("Code: " + Std.string(getLastError()));
-			return;
+			return false;
 		}
 		if (setWindowLong(win, -20, 0x00080000) == 0)
 		{
 			trace("Error setting window to be layered!");
 			trace("Code: " + Std.string(getLastError()));
-			return;
+			return false;
 		}
 		if (setLayeredWindowAttributes(win, color, 0, 0x00000000) == 0)
 		{
 			trace("Error setting color key on window!");
 			trace("Code: " + Std.string(getLastError()));
-			return;
+			return false;
 		}
+		return true;
 		#else
 			trace("windows only lolol");
-			#end
+		return false;
+	        #end
 	}
 }
